@@ -68,45 +68,20 @@ class _TabsPageState extends State<TabsPage> {
             HttpUtil htp = new HttpUtil(header: headers);
             var re  =await htp.get("/lease/noPayLease");
             if(re=="error"){
-
+              //404处理情况
+              ToolTip.myGetTip(context, "请求错误", "服务器地址找不到", "确定");
             }else{
               var resultt = json.decode(re);
-              var aaa=resultt["data"];
+              //获取到的订单信息
+              var orderresult=resultt["data"];
               //获得的结果是空，则代表所有订单已经完成
-              if(aaa==null){
+              if(orderresult==null){
                 String result = await _scan();
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                   return OrderPage(result);
                 }));
               }else{
-                showDialog<Null>(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) {
-                      return new AlertDialog(
-                        title: new Text(
-                          '你有未完成的订单',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        content: new SingleChildScrollView(
-                          child: new ListBody(
-                            children: <Widget>[
-                              new Text('请先支付未完成的订单'),
-                            ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          new FlatButton(
-                            child: new Text('确定'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    }).then((val) {
-                  print(val);
-                });
+                ToolTip.myGetTip(context, "你有未完成的订单", "请先支付未完成的订单", "确定");
               }
             }
           },

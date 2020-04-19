@@ -32,7 +32,7 @@ class _Login_PageState extends State<Login_Page> {
       var re = await aaa.post("/user/login",queryParameters: {"phoneNumber":"$username","randCode":"$password"});
       if(re == "error"){
         //404的处理情况
-        ToolTip.gitTip(context, "请求出错", "服务器地址找不到", "确定");
+        ToolTip.myGetTip(context, "请求出错", "服务器地址找不到", "确定");
       }else {
         var result = jsonDecode(re);
         var isNo = result["code"];
@@ -58,7 +58,7 @@ class _Login_PageState extends State<Login_Page> {
           }), (check) => false);
         }else{
           //跳出提示框
-          ToolTip.gitTip(context, "验证码错误","验证码错误", "确定");
+          ToolTip.myGetTip(context, "验证码错误","验证码错误", "确定");
         }
       }
     }else{

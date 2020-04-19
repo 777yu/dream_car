@@ -1,9 +1,10 @@
 import 'package:dream_car/Util/httpuital.dart';
-import 'package:dream_car/tabs/one_order.dart';
 import 'package:dream_car/tabs/zujiesuccess.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+import 'package:dream_car/Util/ToolTip.dart';
+
 class OrderPage extends StatefulWidget {
   String result;
 
@@ -16,9 +17,10 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   //扫码得到的结果
   String result;
+
   //是否可以租借
   int carState = 1;
-  var disable = "0";//代表用户可以使用
+  var disable = "0"; //代表用户可以使用
   var _style = TextStyle(color: Colors.blue, fontSize: 20);
   var _style2 = TextStyle(color: Colors.red, fontSize: 20);
 
@@ -29,17 +31,16 @@ class _OrderPageState extends State<OrderPage> {
     HttpUtil htp = new HttpUtil(header: headers);
     var re = await htp.get("/car/$result");
     var resultcar = json.decode(re);
-    if(resultcar["code"]=='402'){
+    if (resultcar["code"] == '402') {
       setState(() {
         disable = resultcar["code"];
       });
-    }else{
+    } else {
       setState(() {
         carState = resultcar["data"]["state"];
       });
     }
     //print("state${resultcar["data"]["state"]}");
-
   }
 
   @override
@@ -66,13 +67,17 @@ class _OrderPageState extends State<OrderPage> {
                 ),
                 Row(
                   children: <Widget>[
-                    SizedBox(width: 20,),
+                    SizedBox(
+                      width: 20,
+                    ),
                     Text(
-                      disable == "402"?"用户提示":"车辆信息:",
+                      disable == "402" ? "用户提示" : "车辆信息:",
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      disable=="402"?"该账号已经被停用":carState == 0 ? "可以使用,请点击租车" : "车辆暂时不能使用",
+                      disable == "402"
+                          ? "该账号已经被停用"
+                          : carState == 0 ? "可以使用,请点击租车" : "车辆暂时不能使用",
                       style: carState == 0 ? _style : _style2,
                     )
                   ],
@@ -90,16 +95,19 @@ class _OrderPageState extends State<OrderPage> {
                 textColor: Colors.white,
                 onPressed: carState == 0
                     ? () async {
-                        Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+                        Geolocator geolocator = Geolocator()
+                          ..forceAndroidLocationManager = true;
                         await geolocator.checkGeolocationPermissionStatus();
-                        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        Position position = await Geolocator()
+                            .getCurrentPosition(
+                                desiredAccuracy: LocationAccuracy.high);
                         var lon = position.longitude;
                         var lat = position.latitude;
 //                        print(latlng.lat);
 //                        print(latlng.lng);
                         HttpUtil htp = new HttpUtil(header: headers);
                         var re = await htp.post(
-                          //要放小车的id
+                            //要放小车的id
                             "/car/useCar/$result",
                             queryParameters: {
                               "longitude": lon,
@@ -116,34 +124,8 @@ class _OrderPageState extends State<OrderPage> {
                             return ZuJieSuccess();
                           }));
                         } else {
-                          showDialog<Null>(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (BuildContext context) {
-                                return new AlertDialog(
-                                  title: new Text(
-                                    '租车失败',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                  content: new SingleChildScrollView(
-                                    child: new ListBody(
-                                      children: <Widget>[
-                                        new Text('租车失败，可能正在使用小车，请重试'),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    new FlatButton(
-                                      child: new Text('确定'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }).then((val) {
-                            print(val);
-                          });
+                          ToolTip.myGetTip(
+                              context, "租车失败", "租车失败，可能正在使用小车，请重试", "确定");
                         }
                       }
                     : null,

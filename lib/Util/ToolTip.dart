@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 class ToolTip{
-   static void gitTip(BuildContext context,String text1,String text2,String text3){
+   static void myGetTip(BuildContext context,String text1,String text2,String text3){
         showDialog<Null>(
         context: context,
         barrierDismissible: true,

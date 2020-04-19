@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:dream_car/Util/httpuital.dart';
 import 'dart:convert';
-import 'package:dream_car/tabs/order_page.dart';
 import 'package:tobias/tobias.dart';
-
 class OneOrderPage extends StatefulWidget {
   @override
   _OneOrderPageState createState() => _OneOrderPageState();
 }
-
 class _OneOrderPageState extends State<OneOrderPage> {
   var style = TextStyle(fontSize: 22);
   var style2 = TextStyle(fontSize: 22, color: Colors.blue);
-
   //小车的id
   String _payInfo = "";
   Map _payResult;
   var aaa;
-
   //骑行时间
   int carTime = 10;
-
   //付钱金额
   double money = 10;
   var bbb = "1";//支付返回的结果
   var logging = "1";//显示加载中
   var error = "true";
-
   void _loadData() async {
     _payInfo = "";
     _payResult = {};
