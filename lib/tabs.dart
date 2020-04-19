@@ -1,12 +1,13 @@
 import 'package:dream_car/Util/httpuital.dart';
-import 'package:dream_car/order_page.dart';
+import 'package:dream_car/tabs/order_page.dart';
 import 'package:dream_car/tabs/home_page.dart';
-import 'package:dream_car/tabs/my_page.dart';
+import 'package:dream_car/my_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'dart:convert';
+import 'package:dream_car/Util/ToolTip.dart';
 class TabsPage extends StatefulWidget {
   @override
   _TabsPageState createState() => _TabsPageState();
@@ -67,34 +68,7 @@ class _TabsPageState extends State<TabsPage> {
             HttpUtil htp = new HttpUtil(header: headers);
             var re  =await htp.get("/lease/noPayLease");
             if(re=="error"){
-              showDialog<Null>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return new AlertDialog(
-                      title: new Text(
-                        '请求错误',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      content: new SingleChildScrollView(
-                        child: new ListBody(
-                          children: <Widget>[
-                            new Text('服务器地址找不到'),
-                          ],
-                        ),
-                      ),
-                      actions: <Widget>[
-                        new FlatButton(
-                          child: new Text('确定'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }).then((val) {
-                print(val);
-              });
+
             }else{
               var resultt = json.decode(re);
               var aaa=resultt["data"];

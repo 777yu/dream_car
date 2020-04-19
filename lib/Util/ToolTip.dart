@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 class ToolTip{
-   static void aatip(BuildContext context){
+   static void gitTip(BuildContext context,String text1,String text2,String text3){
         showDialog<Null>(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
           return new AlertDialog(
             title: new Text(
-              '请求错误',
+              text1,
               style: TextStyle(color: Colors.red),
             ),
             content: new SingleChildScrollView(
               child: new ListBody(
                 children: <Widget>[
-                  new Text('服务器地址找不到'),
+                  new Text(text2),
                 ],
               ),
             ),
             actions: <Widget>[
               new FlatButton(
-                child: new Text('确定'),
+                child: new Text(text3),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

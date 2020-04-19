@@ -11,12 +11,10 @@ class Login_Page extends StatefulWidget {
   _Login_PageState createState() => _Login_PageState();
 }
 class _Login_PageState extends State<Login_Page> {
-//   TextEditingController usernameController;
-//定时器
+  //定时器
   Timer countDownTimer;
   //获取验证码名字
   String yzmText="获取验证码";
-//  TextEditingController passwordController;
   final registerFormKey = GlobalKey<FormState>();
   String username, password;
   var info;
@@ -33,90 +31,36 @@ class _Login_PageState extends State<Login_Page> {
       var aaa = new HttpUtil(header: headers);
       var re = await aaa.post("/user/login",queryParameters: {"phoneNumber":"$username","randCode":"$password"});
       if(re == "error"){
-//        showDialog<Null>(
-//            context: context,
-//            barrierDismissible: true,
-//            builder: (BuildContext context) {
-//              return new AlertDialog(
-//                title: new Text(
-//                  '请求错误',
-//                  style: TextStyle(color: Colors.red),
-//                ),
-//                content: new SingleChildScrollView(
-//                  child: new ListBody(
-//                    children: <Widget>[
-//                      new Text('服务器地址找不到'),
-//                    ],
-//                  ),
-//                ),
-//                actions: <Widget>[
-//                  new FlatButton(
-//                    child: new Text('确定'),
-//                    onPressed: () {
-//                      Navigator.of(context).pop();
-//                    },
-//                  ),
-//                ],
-//              );
-//            }).then((val) {
-//          print(val);
-//        });
+        //404的处理情况
+        ToolTip.gitTip(context, "请求出错", "服务器地址找不到", "确定");
       }else {
         var result = jsonDecode(re);
         var isNo = result["code"];
         info = result["data"];
-        //手动代码登录
+        //手动代码登录0代表登录成功
 //      var isNo = "0";
         if(isNo=="0"){
           print("登录成功");
           registerFormKey.currentState.reset();
-          print("username;$username");
-          print("password:$password");
-          //保存用户姓名
-          //"Authorization":AUTHORIZATION,
+//          print("username;$username");
+//          print("password:$password");
+          //USEANAME赋值
           USEANAME = username;
-          //保存Authorization
-//        AUTHORIZATION = info;
           headers = {
             "Accept":"application/json",
             "Content-Type":"application/x-www-form-urlencoded",
             "Authorization":info,
           };
+          //保存username，Authorization
           userNameSave();
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
             return TabsPage();
           }), (check) => false);
         }else{
           //跳出提示框
-          showDialog<Null>(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return new AlertDialog(
-                title: new Text('验证码错误',style: TextStyle(color: Colors.red),),
-                content: new SingleChildScrollView(
-                  child: new ListBody(
-                    children: <Widget>[
-                      new Text('验证码错误'),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text('确定'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          ).then((val) {
-            print(val);
-          });
+          ToolTip.gitTip(context, "验证码错误","验证码错误", "确定");
         }
       }
-
     }else{
       usernameAuto = true;
     }
@@ -180,7 +124,6 @@ class _Login_PageState extends State<Login_Page> {
                     onSaved: (value) {
                       username = value;
                     },
-//                    controller: usernameController,
                     validator: validateUsername,
                     autovalidate: usernameAuto,
                   ),
@@ -188,8 +131,6 @@ class _Login_PageState extends State<Login_Page> {
                     height: 10,
                   ),
                   TextFormField(
-//                    controller: passwordController,
-                    //obscureText: true,
                     keyboardType: TextInputType.number,
                     onSaved: (value) {
                       password = value;
@@ -264,6 +205,5 @@ class _Login_PageState extends State<Login_Page> {
         usernameAuto = true;
       }
     }
-
 }
 
