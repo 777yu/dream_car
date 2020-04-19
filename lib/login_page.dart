@@ -3,13 +3,13 @@ import 'package:dream_car/tabs.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dream_car/Bean/httpuital.dart';
+import 'package:dream_car/Util/httpuital.dart';
 import 'dart:convert';
+import 'package:dream_car/Util/ToolTip.dart';
 class Login_Page extends StatefulWidget {
   @override
   _Login_PageState createState() => _Login_PageState();
 }
-
 class _Login_PageState extends State<Login_Page> {
 //   TextEditingController usernameController;
 //定时器
@@ -25,45 +25,42 @@ class _Login_PageState extends State<Login_Page> {
   void submitRegisterForm() async{
 //    var http = new HttpUtil(header: headersJson);
 //    var re = http.post("/user/login",data: {"phoneNumber":"$username","randCode":"$password"});
-
     //保存控制台输入的数据
     if( registerFormKey.currentState.validate()){
       registerFormKey.currentState.save();
-
      // userNameSave();
-
       //网络登录
       var aaa = new HttpUtil(header: headers);
       var re = await aaa.post("/user/login",queryParameters: {"phoneNumber":"$username","randCode":"$password"});
       if(re == "error"){
-        showDialog<Null>(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return new AlertDialog(
-                title: new Text(
-                  '请求错误',
-                  style: TextStyle(color: Colors.red),
-                ),
-                content: new SingleChildScrollView(
-                  child: new ListBody(
-                    children: <Widget>[
-                      new Text('服务器地址找不到'),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text('确定'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            }).then((val) {
-          print(val);
-        });
+//        showDialog<Null>(
+//            context: context,
+//            barrierDismissible: true,
+//            builder: (BuildContext context) {
+//              return new AlertDialog(
+//                title: new Text(
+//                  '请求错误',
+//                  style: TextStyle(color: Colors.red),
+//                ),
+//                content: new SingleChildScrollView(
+//                  child: new ListBody(
+//                    children: <Widget>[
+//                      new Text('服务器地址找不到'),
+//                    ],
+//                  ),
+//                ),
+//                actions: <Widget>[
+//                  new FlatButton(
+//                    child: new Text('确定'),
+//                    onPressed: () {
+//                      Navigator.of(context).pop();
+//                    },
+//                  ),
+//                ],
+//              );
+//            }).then((val) {
+//          print(val);
+//        });
       }else {
         var result = jsonDecode(re);
         var isNo = result["code"];

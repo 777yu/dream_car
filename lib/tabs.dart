@@ -1,4 +1,4 @@
-import 'package:dream_car/Bean/httpuital.dart';
+import 'package:dream_car/Util/httpuital.dart';
 import 'package:dream_car/order_page.dart';
 import 'package:dream_car/tabs/home_page.dart';
 import 'package:dream_car/tabs/my_page.dart';

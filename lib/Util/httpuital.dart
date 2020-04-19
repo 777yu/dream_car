@@ -1,16 +1,5 @@
-
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:dream_car/main.dart';
-
-//var httpUtil = HttpUtil(
-//    baseUrl:Api.baseUrl,
-//    header:headers
-//);
-//var httpUtilJson = HttpUtil(
-//    baseUrl:Api.baseUrl2,
-//    header:headersJson
-//);
-
 //普通格式的header
 Map<String, dynamic> headers = {
   "Accept":"application/json",
@@ -23,6 +12,9 @@ Map<String, dynamic> headersJson = {
 };
 //https://httpbin.org/ip
 //http://47.240.121.14
+/*
+HttpUtil类封装了dio的网络请求
+ */
 class HttpUtil {
   Dio dio;
   BaseOptions options;
@@ -36,6 +28,7 @@ class HttpUtil {
       //连接服务器超时时间，单位是毫秒.
       connectTimeout: 10000,
       //[如果返回数据是json(content-type)，dio默认会自动将数据转为json，无需再手动转](https://github.com/flutterchina/dio/issues/30)
+      //plain参数会把得到请求变成一个字符串
       responseType:ResponseType.plain,
       ///  响应流上前后两次接受到数据的间隔，单位为毫秒。如果两次间隔超过[receiveTimeout]，
       ///  [Dio] 将会抛出一个[DioErrorType.RECEIVE_TIMEOUT]的异常.
@@ -46,7 +39,37 @@ class HttpUtil {
     dio = new Dio(options);
 //    dio.interceptors.add(CookieManager(CookieJar()));
   }
-
+  static void aatip(BuildContext context){
+    showDialog<Null>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text(
+              '请求错误',
+              style: TextStyle(color: Colors.red),
+            ),
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  new Text('服务器地址找不到'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }).then((val) {
+      print(val);
+    });
+  }
+  //get请求方法
   get(url, {queryParameters, options, cancelToken}) async {
     print('get请求启动! url：$url ,body: $queryParameters');
     Response response;

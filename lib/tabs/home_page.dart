@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dream_car/Bean/httpuital.dart';
+import 'package:dream_car/Util/httpuital.dart';
 import 'package:flutter/material.dart';
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:permission_handler/permission_handler.dart';

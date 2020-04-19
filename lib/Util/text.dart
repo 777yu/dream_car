@@ -1,14 +1,5 @@
-import 'package:dream_car/Bean/cha.dart';
-import 'package:dream_car/Bean/login.dart';
-
-String cc = '123';
 void main()async{
-//  cha();
-//  print("aa");
-//  login();
-//  print("cc"+cc);
-//  cha();
-
+//得到的所有的订单信息
 Map map = {
   "code": "0",
   "message": "SUCCESS",

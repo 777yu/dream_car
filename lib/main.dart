@@ -1,13 +1,10 @@
 import 'package:dream_car/login_page.dart';
 import 'package:dream_car/tabs.dart';
-import 'package:dream_car/tabs/one_order.dart';
 import 'package:flutter/material.dart';
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import 'package:dream_car/order_page.dart';
-import 'package:dream_car/Bean/httpuital.dart';
-
+import 'package:dream_car/Util/httpuital.dart';
 String USEANAME = '';
 //第四次测试
 void main()async{
@@ -21,9 +18,9 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-
 class _MyAppState extends State<MyApp> {
   @override
+  //loginState是定义当前登录状态状态，0代表没有登录，1代表登录
   var loginState;
   Future _validateLogin() async{
     Future<dynamic> future = Future(()async{
