@@ -9,7 +9,7 @@ import 'package:dream_car/order_page.dart';
 import 'package:dream_car/Bean/httpuital.dart';
 
 String USEANAME = '';
-//String AUTHORIZATION='';
+
 void main()async{
   runApp(MyApp());
   await AmapService.init(
@@ -82,8 +82,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-//loginState==0?Login_Page():TabsPage()
-//loginState==0?Login_Page():TabsPage()
 
 
 
