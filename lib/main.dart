@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:TabsPage(),
+      home:loginState==0?Login_Page():TabsPage(),
     );
   }
 }

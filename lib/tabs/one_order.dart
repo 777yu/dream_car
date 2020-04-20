@@ -12,14 +12,16 @@ class _OneOrderPageState extends State<OneOrderPage> {
   //小车的id
   String _payInfo = "";
   Map _payResult;
-  var aaa;
+  //请求结果
+  var ResultData;
   //骑行时间
   int carTime = 10;
   //付钱金额
   double money = 10;
-  var bbb = "1";//支付返回的结果
+  var resultStatus = "1";//支付返回的结果
   var logging = "1";//显示加载中
   var error = "true";
+  //获取订单信息
   void _loadData() async {
     _payInfo = "";
     _payResult = {};
@@ -35,8 +37,8 @@ class _OneOrderPageState extends State<OneOrderPage> {
 //    print("rre++++++++$rrre");
       setState(() {
         logging = "2";
-        aaa = resultt["data"];
-        if (aaa != null) {
+        ResultData = resultt["data"];
+        if (ResultData != null) {
           _payInfo = resultt["data"]["payInfo"];
           carTime = resultt["data"]["totalTime"];
           money = resultt["data"]["fee"];
@@ -54,7 +56,7 @@ class _OneOrderPageState extends State<OneOrderPage> {
 //      print("installed $data");
 //    });
   }
-
+  //支付函数
   callAlipay() async {
     Map payResult;
     try {
@@ -69,7 +71,7 @@ class _OneOrderPageState extends State<OneOrderPage> {
 
     setState(() {
       _payResult = payResult;
-      bbb = _payResult["resultStatus"];
+      resultStatus = _payResult["resultStatus"];
     });
   }
 
@@ -80,99 +82,106 @@ class _OneOrderPageState extends State<OneOrderPage> {
         title: Text("未完成的订单"),
       ),
       body: error == "error"
-          ? Center(
-              child: Text(
-                "加载失败,请返回",
-                style: style,
-              ),
-            )
+          ? getError("加载失败，请返回")
           : logging == "1"
-              ? Center(child: CircularProgressIndicator())
-              : bbb == "9000"
-                  ? Center(
-                      child: Text(
-                        "完成支付，请返回",
-                        style: style,
-                      ),
-                    )
-                  : aaa != null || bbb == "6001"
-                      ? Column(
-                          children: <Widget>[
-                            Expanded(
-                                child: ListView(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text("待支付订单",style: TextStyle(fontSize: 22,color: Colors.blue),)
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 28,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(
-                                      "骑行时间：",
-                                      style: TextStyle(fontSize: 24),
-                                    ),
-                                    Text(
-                                      carTime.toString() + "分钟",
-                                      style: TextStyle(
-                                          fontSize: 24, color: Colors.blue),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(
-                                      "支付金额：",
-                                      style: TextStyle(fontSize: 24),
-                                    ),
-                                    Text(
-                                      money.toString() + "元",
-                                      style: TextStyle(
-                                          fontSize: 24, color: Colors.blue),
-                                    )
-                                  ],
-                                )
-                              ],
-                            )),
-                            Container(
-                              height: 50,
-//            color: Colors.red,
-                              margin: EdgeInsets.only(bottom: 10),
-                              padding: EdgeInsets.only(right: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  RaisedButton(
-                                    child: Text("确认支付"),
-                                    color: Colors.blue,
-                                    textColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40))),
-                                    onPressed: callAlipay,
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        )
+              ? getLoading()
+              : resultStatus == "9000"
+                  ? getError("完成支付，请返回")
+                  : ResultData != null || resultStatus == "6001"
+                      ?getOrder(carTime,money,callAlipay: callAlipay)
                       : Center(child: Text("恭喜你，完成所有的订单",style: style2,)),
     );
   }
+}
+//加载失败
+Center getError(String str) {
+  return Center(
+    child: Text(str, style: TextStyle(fontSize: 22)),
+  );
+}
+
+//加载中
+Center getLoading() {
+  return Center(
+    child: CircularProgressIndicator(),
+  );
+}
+//得到订单信息
+Column getOrder(int carTime,double money,{callAlipay}){
+  return  Column(
+    children: <Widget>[
+      Expanded(
+          child: ListView(
+            children: <Widget>[
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("待支付订单",style: TextStyle(fontSize: 22,color: Colors.blue),)
+                ],
+              ),
+              SizedBox(
+                height: 28,
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    "骑行时间：",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  Text(
+                    carTime.toString() + "分钟",
+                    style: TextStyle(
+                        fontSize: 24, color: Colors.blue),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    "支付金额：",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  Text(
+                    money.toString() + "元",
+                    style: TextStyle(
+                        fontSize: 24, color: Colors.blue),
+                  )
+                ],
+              )
+            ],
+          )),
+      Container(
+        height: 50,
+//            color: Colors.red,
+        margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.only(right: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            RaisedButton(
+              child: Text("确认支付"),
+              color: Colors.blue,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(40))),
+              onPressed: callAlipay,
+            )
+          ],
+        ),
+      )
+    ],
+  );
 }

@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   List<double> lat = [];
   //点集合
   List<Marker> _markers = [];
+  List<MarkerOption> list = [];
   //获取经纬度
   getJingwei() async{
     Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
@@ -29,9 +30,9 @@ class _HomePageState extends State<HomePage> {
     var re =await htp.post("/car/nearby",queryParameters: {"longitude":longitude,"dimensionality":dimensionality,"distance":2000.0});
     var reposition = json.decode(re);
     List positionList = reposition["data"];
-    print("----------------------------------------------------------");
-    print("positionList+$positionList");
-    print("----------------------------------------------------------");
+//    print("----------------------------------------------------------");
+//    print("positionList+$positionList");
+//    print("----------------------------------------------------------");
     for (int i = 0; i <positionList.length; i++) {
       lon.add(positionList[i]["longitude"]);
       lat.add(positionList[i]["dimensionality"]);
@@ -39,7 +40,6 @@ class _HomePageState extends State<HomePage> {
 //    print(lat);
 //    print(lon);
   }
-  List<MarkerOption> list = [];
   setMakerList(){
     print("setMakerLit启动");
     for (int i = 0; i <lon.length; i++){
